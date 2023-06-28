@@ -20,6 +20,6 @@ contract StableCoin is ERC20Burnable, Ownable{
     }
 
     function mint (address _to, uint256 _amount) external onlyOwner returns(bool) {
-
+        mint(_to, _amount);
     }
 }
