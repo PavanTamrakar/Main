@@ -8,6 +8,12 @@ contract nSCLogic {
 
     mapping (address token => address priceFeed) private s_priceFeeds;
     mapping(address user => mapping(address depositedToken => uint256 amount)) private s_depositedToken;
+    mapping(address user => uint256 amount) private s_SCMinted;
+    address[] private s_depositedTokens;
+
+    event depositedToken(address indexed user, address indexed token, uint256 indexed amount);
+
+    event redeemedToken(address indexed redeemedFrom, uint256 indexed amountDeposited, address from, address to);
 
     StableCoin private immutable i_sc;
 
@@ -35,17 +41,21 @@ contract nSCLogic {
         i_sc = StableCoin(scAddress);
     }
 
-    function depositAndMint () external {}
+    function depositAndMint (address depositedTokenAddress, uint256 amountDeposited, uint256 amountScToMint) external {
+        depositCollateral(depositedTokenAddress, amountDeposited);
+        mintDsc(amountScToMint);
+    }
 
     function deposit (address depositTokenAddress, uint256 amountOfDeposit) moreThanZero (amountOfDeposit) allowedToken (depositTokenAddress) external {}
 
     function redeemDeposit () external {}
 
-    function redeem () external {}
 
-    function mintSC () external {}
+    function mintSC () public {}
 
-    function burnSC () external {}
+    function burnSC () private {}
+
+    function redeem () private {}
 
     function hetHealthFactor () external {}
 }
